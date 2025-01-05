@@ -17,3 +17,4 @@ from . import source_terms
 from . import capillary_pressure
 from . import meniscus
 from . import multiphase
+from . import hydraulics
