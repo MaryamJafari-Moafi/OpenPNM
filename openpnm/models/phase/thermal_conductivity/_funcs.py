@@ -9,6 +9,7 @@ __all__ = [
     'liquid_pure_sr',
     'gas_mixture_whz',
     'liquid_mixture_DIPPR9H',
+    'value'
 ]
 
 
@@ -309,3 +310,32 @@ def gas_mixture_whz(
             denom += ys[ki]*A
         kmix += num/denom
     return kmix
+@_phasedocs
+def value(phase, constant, size='throat.all'):
+    r"""
+    Returns a constant value sized to match the specified array length in the phase.
+
+    Parameters
+    ----------
+    %(phase)s
+    constant : float
+        The constant value to be returned.
+    size : str, optional
+        The key specifying the target size in the phase dictionary.
+        Defaults to 'throat.all'.
+
+    Returns
+    -------
+    ndarray
+        A numpy ndarray filled with the constant value, sized to match the specified array.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> phase = {'throat.all': np.ones(10)}
+    >>> value(phase, constant=5, size='throat.all')
+    array([5, 5, 5, 5, 5, 5, 5, 5, 5, 5])
+    """
+    size_array = phase[size]  # Fetch the array to determine size
+    value = np.ones_like(size_array, dtype=float) * constant  # Create the constant array
+    return value
