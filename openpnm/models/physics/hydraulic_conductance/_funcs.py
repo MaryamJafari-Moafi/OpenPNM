@@ -51,6 +51,7 @@ def generic_hydraulic(
     gt = Ft / mut
     g2 = F2 / mu2
     # return 1 / (1/g1 + 1/gt + 1/g2)
+    print("throat hydraulic conductance")
     return gt
 
 
