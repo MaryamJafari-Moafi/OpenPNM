@@ -50,7 +50,8 @@ def generic_hydraulic(
     g1 = F1 / mu1
     gt = Ft / mut
     g2 = F2 / mu2
-    return 1 / (1/g1 + 1/gt + 1/g2)
+    # return 1 / (1/g1 + 1/gt + 1/g2)
+    return gt
 
 
 @_doctxt
