@@ -59,7 +59,29 @@ def spheres_and_cylinders(
     pores on each end.
 
     """
+
+    pore_coords = 'pore.coordination_number'
     D1, Dt, D2 = network.get_conduit_data(pore_diameter.split('.', 1)[-1]).T
+    # conns = network.conns
+
+    # C1, C2 = network[pore_coords][conns.T]
+
+    throat_conns = network['throat.conns']  # Pore connections for each throat
+    row = throat_conns[:, 0]
+    col = throat_conns[:, 1]
+    print(network[pore_coords].shape, col.shape)
+    import numpy as np
+    C1 = np.zeros(throat_conns.shape[0])
+    C2 = np.zeros(throat_conns.shape[0])
+    for i in range(throat_conns.shape[0]):
+        C1[i] = network[pore_coords][row[i]]
+        C2[i] = network[pore_coords][col[i]]
+
+
+    print('C1.shape',C1.shape)
+
+    # C1, Ct, C2 = network.get_conduit_data(pore_coords.split('.', 1)[-1]).T
+
     L1, Lt, L2 = _conduit_lengths.spheres_and_cylinders(
         network=network,
         pore_diameter=pore_diameter,
@@ -79,9 +101,21 @@ def spheres_and_cylinders(
     I1 = I2 = It = 1 / (2 * _np.pi)
 
     # S is 1 / (16 * pi^2 * I * F)
+    # S1 = 1 / (16 * _np.pi**2 * I1 * F1)
+    # St = 1 / (16 * _np.pi**2 * It * Ft)
+    # S2 = 1 / (16 * _np.pi**2 * I2 * F2)
+
+    # S is 1 / (16 * pi^2 * I * F)
     S1 = 1 / (16 * _np.pi**2 * I1 * F1)
     St = 1 / (16 * _np.pi**2 * It * Ft)
     S2 = 1 / (16 * _np.pi**2 * I2 * F2)
+
+    # coord = network['pore.coords']
+    print('S1.shape', S1.shape)
+
+    S1 = S1/C1
+    S2 = S2/C2
+
 
     return _np.vstack([S1, St, S2]).T
 
