@@ -40,6 +40,7 @@ def generic_hydraulic(
     mut = phase[throat_viscosity]
 
     SF = network[size_factors]
+    # print('size factor in conductance:',SF)
     if isinstance(SF, dict):  # Legacy approach
         F1, Ft, F2 = SF.values()
     elif SF.ndim > 1:  # Nt-by-3 array
@@ -50,9 +51,9 @@ def generic_hydraulic(
     g1 = F1 / mu1
     gt = Ft / mut
     g2 = F2 / mu2
-    # return 1 / (1/g1 + 1/gt + 1/g2)
+    return 1 / (1/g1 + 1/gt + 1/g2)
     print("throat hydraulic conductance")
-    return gt
+    # return gt
 
 
 @_doctxt
