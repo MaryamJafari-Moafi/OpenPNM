@@ -113,11 +113,11 @@ def spheres_and_cylinders(
     # coord = network['pore.coords']
     print('S1.shape', S1.shape)
 
-    # S1 = S1/C1*2
-    # S2 = S2/C2*2
-
     S1 = S1/C1*2
     S2 = S2/C2*2
+
+    # S1 = S1/C1*2
+    # S2 = S2/C2*2
 
 
     return _np.vstack([S1, St, S2]).T
