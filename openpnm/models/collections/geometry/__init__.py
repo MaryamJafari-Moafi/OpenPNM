@@ -5,3 +5,4 @@ from .pyramids_and_cuboids import pyramids_and_cuboids
 from .trapezoids_and_rectangles import trapezoids_and_rectangles
 from .cubes_and_cuboids import cubes_and_cuboids
 from .squares_and_rectangles import squares_and_rectangles
+from .portion_spheres_and_cylinders import portion_spheres_and_cylinders

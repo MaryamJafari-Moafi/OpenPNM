@@ -4,6 +4,7 @@ from openpnm.models.geometry import _geodocs
 
 
 __all__ = [
+    "portion_spheres_and_cylinders",
     "spheres_and_cylinders",
     "circles_and_rectangles",
     "cones_and_cylinders",
@@ -22,6 +23,107 @@ __all__ = [
 
 
 @_geodocs
+def portion_spheres_and_cylinders(
+    network,
+    pore_diameter="pore.diameter",
+    throat_diameter="throat.diameter",
+):
+    r"""
+    Computes hydraulic size factors for conduits assuming pores are
+    spheres and throats are cylinders.
+
+    Parameters
+    ----------
+    %(network)s
+    %(Dp)s
+    %(Dt)s
+
+    Returns
+    -------
+    size_factors : ndarray
+        Array (Nt by 3) containing conduit values for each element
+        of the pore-throat-pore conduits. The array is formatted as
+        ``[pore1, throat, pore2]``.
+
+    Notes
+    -----
+    The hydraulic size factor is the geometrical part of the pre-factor in
+    Stoke's flow:
+
+    .. math::
+
+        Q = \frac{A^2}{8 \pi \mu L} \Delta P
+          = \frac{S_{hydraulic}}{\mu} \Delta P
+
+    Thus :math:`S_{hydraulic}` represents the combined effect of the area
+    and length of the *conduit*, which consists of a throat and 1/2 of the
+    pores on each end.
+
+    """
+
+    pore_coords = 'pore.coordination_number'
+    D1, Dt, D2 = network.get_conduit_data(pore_diameter.split('.', 1)[-1]).T
+    # conns = network.conns
+
+    # C1, C2 = network[pore_coords][conns.T]
+
+    throat_conns = network['throat.conns']  # Pore connections for each throat
+    row = throat_conns[:, 0]
+    col = throat_conns[:, 1]
+    print(network[pore_coords].shape, col.shape)
+    import numpy as np
+    C1 = np.zeros(throat_conns.shape[0])
+    C2 = np.zeros(throat_conns.shape[0])
+    for i in range(throat_conns.shape[0]):
+        C1[i] = network[pore_coords][row[i]]
+        C2[i] = network[pore_coords][col[i]]
+
+
+    print('C1.shape',C1.shape)
+
+    # C1, Ct, C2 = network.get_conduit_data(pore_coords.split('.', 1)[-1]).T
+
+    L1, Lt, L2 = _conduit_lengths.spheres_and_cylinders(
+        network=network,
+        pore_diameter=pore_diameter,
+        throat_diameter=throat_diameter
+    ).T
+
+    # Fi is the integral of (1/A^2) dx, x = [0, Li]
+    a = 4 / (D1**3 * _np.pi**2)
+    b = 2 * D1 * L1 / (D1**2 - 4 * L1**2) + _np.arctanh(2 * L1 / D1)
+    F1 = a * b
+    a = 4 / (D2**3 * _np.pi**2)
+    b = 2 * D2 * L2 / (D2**2 - 4 * L2**2) + _np.arctanh(2 * L2 / D2)
+    F2 = a * b
+    Ft = Lt / (_np.pi / 4 * Dt**2)**2
+
+    # I is the integral of (y^2 + z^2) dA, divided by A^2
+    I1 = I2 = It = 1 / (2 * _np.pi)
+
+    # S is 1 / (16 * pi^2 * I * F)
+    # S1 = 1 / (16 * _np.pi**2 * I1 * F1)
+    # St = 1 / (16 * _np.pi**2 * It * Ft)
+    # S2 = 1 / (16 * _np.pi**2 * I2 * F2)
+
+    # S is 1 / (16 * pi^2 * I * F)
+    S1 = 1 / (16 * _np.pi**2 * I1 * F1)
+    St = 1 / (16 * _np.pi**2 * It * Ft)
+    S2 = 1 / (16 * _np.pi**2 * I2 * F2)
+
+    # coord = network['pore.coords']
+    # print('S1.shape', S1.shape)
+    print('Portion sphere and cylinder')
+
+    S1 = S1/C1*2
+    S2 = S2/C2*2
+
+    # S1 = S1/C1*2
+    # S2 = S2/C2*2
+
+
+    return _np.vstack([S1, St, S2]).T
+
 def spheres_and_cylinders(
     network,
     pore_diameter="pore.diameter",
@@ -111,10 +213,10 @@ def spheres_and_cylinders(
     S2 = 1 / (16 * _np.pi**2 * I2 * F2)
 
     # coord = network['pore.coords']
-    print('S1.shape', S1.shape)
+    print('sphere and cylinder')
 
-    S1 = S1/C1*2
-    S2 = S2/C2*2
+    # S1 = S1/C1*2
+    # S2 = S2/C2*2
 
     # S1 = S1/C1*2
     # S2 = S2/C2*2
