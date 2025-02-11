@@ -176,6 +176,7 @@ class ReactiveTransport(Transport):
             Initial guess of the unknown variable
 
         """
+        print('_run_special in reactive trasnport')
         w = self.settings["relaxation_factor"]
         maxiter = self.settings["newton_maxiter"]
         f_rtol = self.settings["f_rtol"]
@@ -205,6 +206,8 @@ class ReactiveTransport(Transport):
                     self.soln.is_converged = is_converged
                     logger.info(f"Solution converged, residual norm: {norm(res):.4e}")
                     return
+                
+                print('_run_special in reactive trasnport, before call _run_special')
                 super()._run_special(solver=solver, x0=xold, w=w)
                 dx = self.x - xold
                 xold = self.x
@@ -229,6 +232,7 @@ class ReactiveTransport(Transport):
         r"""
         Builds/updates A, b based on the recent solution on algorithm object.
         """
+        # print('call _update_iterative_props in reactive transport')
         self._update_iterative_props()
         super()._update_A_and_b()
         self._apply_sources()

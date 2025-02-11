@@ -32,6 +32,7 @@ def ideal_gas(
     -------
 
     """
+    print('update density of air')
     P = phase[P]
     T = phase[T]
     try:
@@ -79,6 +80,8 @@ def water_correlation(
         Water Treatment, 2010.
 
     """
+
+    print('update density of water')
     T = phase[T]
     if salinity in phase.keys():
         S = phase[salinity]

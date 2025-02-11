@@ -191,7 +191,7 @@ class ModelsDict(PrintableDict):
                 names[name] = []
             names[name].append(domain)
         D = PrintableDict(names, key='Model', value='Domain')
-        print(D)
+        # print(D)
 
     def __str__(self):  # pragma: no cover
         horizontal_rule = '―' * 85
@@ -400,6 +400,7 @@ class ModelsMixin2:
         # Insepct model to extract arguments and default values
         kwargs.update(self._inspect_model(model, kwargs))
         self.models[propname+'@'+domain] = ModelWrapper(**kwargs)
+
         if regen_mode != 'deferred':
             self.run_model(propname+'@'+domain)
 
@@ -458,6 +459,8 @@ class ModelsMixin2:
         such that 'pore.diameter' will be run before 'pore.volume', since
         the diameter is required to compute the volume.
         """
+
+        # print("regenerate_models in core")
         all_models = self.models.dependency_list()
         # Regenerate all properties by default
         if propnames is None:
@@ -496,6 +499,8 @@ class ModelsMixin2:
             ``domain=domain1``. Passing ``domain=None`` will regenerate
             all models starting with ``propname``.
         """
+
+        # print("run_model in core")
         if domain is None:
             if '@' in propname:  # Get domain from propname if present
                 propname, _, domain = propname.partition('@')
@@ -512,6 +517,8 @@ class ModelsMixin2:
             mod_dict = self.models[propname+'@'+domain]
             # Collect kwargs
             kwargs = {'domain': f'{element}.{domain}'}
+
+            # print('kwargs', kwargs)
             for item in mod_dict.keys():
                 if item not in ['model', 'regen_mode']:
                     kwargs[item] = mod_dict[item]
@@ -531,6 +538,8 @@ class ModelsMixin2:
                     vals = vals[self[f'{element}.{domain}']]
             else:  # Model that accepts domain arg
                 vals = mod_dict['model'](self, **kwargs)
+            # print('mod_dict[model]',mod_dict['model'])
+            # print('vals:', vals)
             # Finally add model results to self
             if isinstance(vals, np.ndarray):  # If model returns single array
                 if propname not in self.keys():

@@ -187,6 +187,8 @@ class Transport(Algorithm):
         None
 
         """
+
+        print('run in trasnport')
         logger.info('Running Transport')
         if solver is None:
             solver = getattr(solvers, ws.settings.default_solver)()
@@ -204,9 +206,13 @@ class Transport(Algorithm):
         self.soln.is_converged = False
         # Build A and b, then solve the system of equations
         self._update_A_and_b()
+
+        # print('run in trasnport, after _update_A_and_b')
         self._run_special(solver=solver, x0=x0, verbose=verbose)
 
     def _run_special(self, solver, x0, w=1.0, verbose=None):
+
+        print('_run_special in trasnport')
         # Make sure A and b are 'still' well-defined
         self._validate_linear_system()
         # Solve and apply under-relaxation
