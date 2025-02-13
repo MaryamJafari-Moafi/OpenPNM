@@ -1,4 +1,4 @@
-import OpenPNM.openpnm.models.physics as mods
+import openpnm.models.physics as mods
 
 Dless_numbers = {
     'pore.reynolds_number': {
