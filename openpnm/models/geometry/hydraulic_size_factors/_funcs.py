@@ -70,7 +70,7 @@ def portion_spheres_and_cylinders(
     throat_conns = network['throat.conns']  # Pore connections for each throat
     row = throat_conns[:, 0]
     col = throat_conns[:, 1]
-    print(network[pore_coords].shape, col.shape)
+    # print(network[pore_coords].shape, col.shape)
     import numpy as np
     C1 = np.zeros(throat_conns.shape[0])
     C2 = np.zeros(throat_conns.shape[0])
@@ -162,7 +162,7 @@ def spheres_and_cylinders(
 
     """
 
-    pore_coords = 'pore.coordination_number'
+    # pore_coords = 'pore.coordination_number'
     D1, Dt, D2 = network.get_conduit_data(pore_diameter.split('.', 1)[-1]).T
     # conns = network.conns
 
@@ -171,16 +171,16 @@ def spheres_and_cylinders(
     throat_conns = network['throat.conns']  # Pore connections for each throat
     row = throat_conns[:, 0]
     col = throat_conns[:, 1]
-    print(network[pore_coords].shape, col.shape)
-    import numpy as np
-    C1 = np.zeros(throat_conns.shape[0])
-    C2 = np.zeros(throat_conns.shape[0])
-    for i in range(throat_conns.shape[0]):
-        C1[i] = network[pore_coords][row[i]]
-        C2[i] = network[pore_coords][col[i]]
+    # print(network[pore_coords].shape, col.shape)
+
+    # C1 = np.zeros(throat_conns.shape[0])
+    # C2 = np.zeros(throat_conns.shape[0])
+    # for i in range(throat_conns.shape[0]):
+    #     C1[i] = network[pore_coords][row[i]]
+    #     C2[i] = network[pore_coords][col[i]]
 
 
-    print('C1.shape',C1.shape)
+    # print('C1.shape',C1.shape)
 
     # C1, Ct, C2 = network.get_conduit_data(pore_coords.split('.', 1)[-1]).T
 
