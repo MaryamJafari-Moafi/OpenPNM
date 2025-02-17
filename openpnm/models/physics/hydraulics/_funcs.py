@@ -18,6 +18,7 @@ def reynolds_number(
     pore_volume="pore.volume",
     pore_surface_area="pore.surface_area",
     length="throat.diameter",
+    Diameter = "pore.diameter"
 ):
     r"""
     Calculates the Reynolds number for fluid in each pore in a porous medium.
@@ -58,8 +59,9 @@ def reynolds_number(
     mu = phase[pore_viscosity]
     sa = phase[pore_surface_area]
     vol = phase[pore_volume]
-    h_d = 4 * vol / sa   #hydraulic_diameter
-    return rho * v * h_d / mu
+    d = phase[Diameter]
+    # h_d = 4 * vol / sa   #hydraulic_diameter
+    return rho * v * d / mu
 
 
 @_doctxt
