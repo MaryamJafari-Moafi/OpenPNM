@@ -36,6 +36,10 @@ def generic_hydraulic(
     """
     network = phase.network
     conns = network.conns
+    # print('network in generic: ', network)
+    # print('in generic, phase: ', phase)
+
+    # print('in generic:', phase[pore_viscosity][conns].T)
     mu1, mu2 = phase[pore_viscosity][conns].T
     mut = phase[throat_viscosity]
 
